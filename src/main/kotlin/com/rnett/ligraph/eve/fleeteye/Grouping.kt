@@ -14,7 +14,7 @@ import java.util.*
 const val INITIAL_SCORE = 1
 const val ALLIANCE_SCORE = 4
 const val CORP_SCORE = 2
-const val SHIP_SCORE = 2
+const val SHIP_SCORE = 3
 const val KILL5_SCORE = 3
 const val KILL10_SCORE = 5
 const val KILL30_SCORE = 10

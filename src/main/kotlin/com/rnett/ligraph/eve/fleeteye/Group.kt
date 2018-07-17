@@ -7,7 +7,7 @@ import com.rnett.ligraph.eve.fleeteye.db.zKill
 import org.jetbrains.exposed.sql.transactions.transaction
 
 
-const val GROUP_THRESHOLD = 5
+const val GROUP_THRESHOLD = 4
 
 
 fun isScoutShip(ship: invtype): Boolean {

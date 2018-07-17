@@ -47,8 +47,8 @@ object Groups {
         return strSet.toSet()
     }
 
-    private fun bondStrength(char: characterdata, group: Set<characterdata>): Double =
-            transaction { char.characterdata_groupings_char.filter { group.contains(it.otherchar) }.sumBy { it.score } }.toDouble() / group.size
+    fun bondStrength(char: characterdata, group: Set<characterdata>): Double =
+            transaction { char.characterdata_groupings_char.filter { group.contains(it.otherchar) }.sumBy { it.score } }.toDouble() / (group.size * 0.9)
 
 
     private fun addToSetR(char: characterdata, set: MutableSet<characterdata>) {

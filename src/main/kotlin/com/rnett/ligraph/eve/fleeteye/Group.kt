@@ -8,7 +8,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 
 const val GROUP_THRESHOLD = 3
-
+const val BOND_THRESHOLD = 0.3
 
 fun isScoutShip(ship: invtype): Boolean {
     return false
@@ -17,14 +17,29 @@ fun isScoutShip(ship: invtype): Boolean {
 //TODO flesh out updates.  should be one method that gets called when a new kill comes in
 object Groups {
 
-    val groups = mutableSetOf<Group>()
+    private val groupSet = mutableSetOf<Group>()
+    val groups get() = groupSet.toList()
 
     val strongestBonds = mutableMapOf<characterdata, Double>()
 
+    fun process(kill: ZKill) {
+        val g = Group(kill)
+
+        if (g.members.size >= 2)
+            Groups.groupSet.add(g)
+
+        Groups.groupSet.removeIf { it.members.size < 2 }
+
+        if (kill.victim.character != null)
+            removeChar(kill.victim.character!!)
+    }
+
     fun removeChar(char: characterdata) {
-        strongestBonds.remove(char)
-        groups.forEach {
-            it.members.removeIf { it.pilot == char }
+        transaction {
+            strongestBonds.remove(char)
+            groupSet.forEach {
+                it.members.removeIf { it.pilot == char }
+            }
         }
     }
 
@@ -37,12 +52,12 @@ object Groups {
 
         val strSet = set.map {
             GroupMember(it, bondStrength(it, set))
-        }.filter { it.strength >= strongestBonds[it.pilot] ?: 0.0 }
+        }.filter { strongestBonds[it.pilot] ?: 0.0 == 0.0 || it.strength >= strongestBonds[it.pilot]!! + BOND_THRESHOLD }
 
         strSet.forEach {
             val pilot = it.pilot
             strongestBonds[it.pilot] = it.strength
-            groups.forEach {
+            groupSet.forEach {
                 it.members.removeIf { it.pilot == pilot }
             }
         }
@@ -52,8 +67,9 @@ object Groups {
 
     fun bondStrength(char: characterdata, group: Set<characterdata>): Double =
             transaction { char.characterdata_groupings_char.filter { group.contains(it.otherchar) }.sumBy { it.score } }.toDouble() / (group.size * 0.9)
-    //TODO some kind of thingy to make big groups above a certain threshhold.  No reason to make that many subgroups.
+    //TODO some kind of thingy to make big groupSet above a certain threshhold.  No reason to make that many subgroups.
     //TODO want to look at sub group of possible members?  e.g. members w/o strength
+    //TODO want some degree of differentiation before I split.  have a threshhold for pulling out of an old group ( aka if it.strength - strongestBond >= THRESHHOLD in method above)?
 
 
     private fun addToSetR(char: characterdata, set: MutableSet<characterdata>) {
@@ -94,12 +110,6 @@ class Group(val latestKill: ZKill) {
             val kill = it
             pilots.any { kill.playerAttackers.map { it.character!! }.contains(it) }
         }
-    }
-
-    init {
-        Groups.groups.add(this)
-
-        Groups.groups.removeIf { it.members.size < 2 }
     }
 
 }

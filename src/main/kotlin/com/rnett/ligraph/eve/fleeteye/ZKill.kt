@@ -2,6 +2,8 @@ package com.rnett.ligraph.eve.fleeteye
 
 import com.google.gson.annotations.JsonAdapter
 import com.google.gson.annotations.SerializedName
+import com.rnett.core.PostProcessable
+import com.rnett.core.PostProcessingEnabler
 import com.rnett.eve.ligraph.sde.*
 import com.rnett.ligraph.eve.fleeteye.db.*
 import org.jetbrains.exposed.sql.transactions.transaction

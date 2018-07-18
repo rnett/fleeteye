@@ -14,6 +14,7 @@ fun isScoutShip(ship: invtype): Boolean {
     return false
 }
 
+//TODO flesh out updates.  should be one method that gets called when a new kill comes in
 object Groups {
 
     val groups = mutableSetOf<Group>()
@@ -49,6 +50,8 @@ object Groups {
 
     fun bondStrength(char: characterdata, group: Set<characterdata>): Double =
             transaction { char.characterdata_groupings_char.filter { group.contains(it.otherchar) }.sumBy { it.score } }.toDouble() / (group.size * 0.9)
+    //TODO some kind of thingy to make big groups above a certain threshhold.  No reason to make that many subgroups.
+    //TODO want to look at sub group of possible members?  e.g. members w/o strength
 
 
     private fun addToSetR(char: characterdata, set: MutableSet<characterdata>) {

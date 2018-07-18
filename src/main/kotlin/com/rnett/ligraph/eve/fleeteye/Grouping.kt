@@ -46,10 +46,12 @@ object GroupingHelper {
 
         kill.playerAttackers.forEach {
             val original = it
-            kill.playerAttackers.forEach {
-                if (it != original)
-                    updateGrouping(original.character!!, it.character!!)
-            }
+
+            if (it.shipTypeID != 0)
+                kill.playerAttackers.forEach {
+                    if (it != original)
+                        updateGrouping(original.character!!, it.character!!)
+                }
         }
     }
 

@@ -33,6 +33,8 @@ object Groups {
 
         chars.forEach { addToSetR(it, set) }
 
+        set.removeIf { it.shipid == 0 }
+
         val strSet = set.map {
             GroupMember(it, bondStrength(it, set))
         }.filter { it.strength >= strongestBonds[it.pilot] ?: 0.0 }

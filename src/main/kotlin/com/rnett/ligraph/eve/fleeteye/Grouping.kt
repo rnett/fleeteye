@@ -49,7 +49,7 @@ object GroupingHelper {
 
             if (it.shipTypeID != 0)
                 kill.playerAttackers.forEach {
-                    if (it != original)
+                    if (it != original && it.shipTypeID != 0)
                         updateGrouping(original.character!!, it.character!!)
                 }
         }

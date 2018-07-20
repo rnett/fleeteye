@@ -6,6 +6,7 @@ import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.IntIdTable
+import org.jetbrains.exposed.sql.transactions.transaction
 
 
 object kills : IntIdTable(columnName = "killid") {
@@ -51,7 +52,8 @@ class kill(id: EntityID<Int>) : IntEntity(id) {
     }
 
     override fun hashCode(): Int {
-        return killid
+        return transaction { killid } 
+
     }
 
 
@@ -120,7 +122,8 @@ class grouping(id: EntityID<Int>) : IntEntity(id) {
     }
 
     override fun hashCode(): Int {
-        return groupings.idFromPKs(charid, othercharid)
+        return transaction { groupings.idFromPKs(charid, othercharid) } 
+
     }
 
 
@@ -180,7 +183,8 @@ class alliance(id: EntityID<Int>) : IntEntity(id) {
     }
 
     override fun hashCode(): Int {
-        return allianceid
+        return transaction { allianceid } 
+
     }
 
 
@@ -247,7 +251,8 @@ class corporation(id: EntityID<Int>) : IntEntity(id) {
     }
 
     override fun hashCode(): Int {
-        return corpid
+        return transaction { corpid } 
+
     }
 
 
@@ -323,7 +328,8 @@ class characterdata(id: EntityID<Int>) : IntEntity(id) {
     }
 
     override fun hashCode(): Int {
-        return charid
+        return transaction { charid } 
+
     }
 
 

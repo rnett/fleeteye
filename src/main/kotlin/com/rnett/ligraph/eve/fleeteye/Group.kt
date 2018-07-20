@@ -35,12 +35,11 @@ object Groups {
     }
 
     fun removeChar(char: characterdata) {
-        transaction {
             strongestBonds.remove(char)
             groupSet.forEach {
                 it.members.removeIf { it.pilot == char }
+
             }
-        }
     }
 
     fun makeGroupSet(chars: List<characterdata>): Set<GroupMember> {

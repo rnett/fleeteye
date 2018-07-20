@@ -34,8 +34,8 @@ val sde_version = getNewestCommit("rnett/sde", "2f1d3b82dc")
 dependencies {
     compile(kotlin("stdlib-jdk8"))
     testCompile("junit", "junit", "4.12")
-    compile("com.github.rnett:sde:$sde_version")
-    compile("com.github.kizitonwose.time:time:1.0.1")
+    implementation("com.github.rnett:sde:$sde_version")
+    implementation("com.github.kizitonwose.time:time:1.0.1")
 }
 
 configure<JavaPluginConvention> {

@@ -29,7 +29,7 @@ fun getNewestCommit(gitURL: String, default: String = ""): String {
     }
 }
 
-val sde_version = getNewestCommit("rnett/sde", "2b8fcbffbe")
+val sde_version = getNewestCommit("rnett/sde", "683fdbec1f")
 
 dependencies {
     compile(kotlin("stdlib-jdk8"))
